@@ -82,11 +82,9 @@
             p.draw = function () {
                 p.background(10, 10, 15);
 
-                // Vibrant blue ↔ red oscillation
                 colorT += 0.008;
                 let t = Math.sin(colorT) * 0.5 + 0.5; // 0 = blue, 1 = red
 
-                // Electric blue (20, 80, 255) → saturated red (255, 15, 30)
                 let r = p.lerp(20, 255, t);
                 let g = p.lerp(80, 15, t);
                 let b = p.lerp(255, 30, t);
@@ -114,7 +112,6 @@
                     return [x3, y3, z2];
                 }
 
-                // ── Shadow drawn first so it's always behind the cube ──
                 drawShadow(rotateV, r, g, b);
 
                 let light1 = normalize([0.6, -0.8, 0.5]);
@@ -157,7 +154,6 @@
                     rv.forEach(([x, y, z]) => p.vertex(x, y, z));
                     p.endShape(p.CLOSE);
 
-                    // Metallic edge highlight
                     p.stroke(
                         p.constrain(fr * 1.6 + 60, 0, 255),
                         p.constrain(fg * 1.4 + 40, 0, 255),
@@ -185,7 +181,6 @@
             }
 
             function drawShadow(rotateV, r, g, b) {
-                // Find the lowest projected Y point of the cube to anchor shadow
                 let maxY = -Infinity;
                 V.forEach(v => {
                     let [, ry] = rotateV(v);
@@ -193,12 +188,9 @@
                 });
 
                 p.push();
-                // Place shadow just below the cube's lowest visible vertex
                 p.translate(0, maxY + 0.06, 0);
                 p.rotateX(Math.PI / 2); // lay flat on the ground plane
                 p.noStroke();
-
-                // Layered soft-blur shadow ellipses
                 const layers = [
                     { spread: 0.70, alpha: 15 },
                     { spread: 0.45, alpha: 25 },
